@@ -1,0 +1,105 @@
+I have described below brief flow for agency users and first party of property managment.
+
+Complex part we will take up once we finish this.
+
+Brief structure for Agency and its users:
+1. We will have admin login to the system
+2. Admin will add Agencies/with its details into the system    ( every agency will have Id)
+3. Agency User Regisistration Page
+    There will be Agency USers ( Employees of an Agency/ Clients / Caregivers etc ) 
+    In User Registration page, drop of Agencies and Roles will be there.
+    Roles can be admin/manager/assistant/Clients/Caregiver/ClientFamily/Conserver etc. ( We need one UI in system to create roles )
+    Based on the rols, we will take additional details as below
+4.     Clients Details
+    When we register Clients (from user registration page- point 3), 
+    we will store additional details like Diagnosis, medications etc.
+5. Caregiver Details        
+    when we register Caregiver (from same form of user registration)
+    we will store additional details like languages,special skills etc
+6. Client Family 
+    When someone from client's family regsiters, we need to select client/clients associated to family.
+7. Conserver
+    When we have a user as conserver, we need to select client/clients associated to conserver
+8. Caregiver - Clients assocation
+    At any point, person from agency will have rights to assign caregivers to clients.
+     
+----------------------------
+Property Management
+1. Registration for Property owner -
+   Collect all its details and its type - whether property management company/individual home owner etc
+2. Property Details
+   Property owner can add number of properties and we need to enter details of each property inclusing number of rooms etc.
+   
+   
+Question
+==============
+what is status field
+Drop down of Agencies.
+date_registered
+
+
+details -- ajax
+archive -- ajax
+
+Left Navigation
+---------------
+User Profile
+    Account Details
+    Change Password
+                        Right Page 
+---------------------------------------------------------------------------------
+Agencies                Total Number
+                        1) Name                 Details | Edit | Active | Inactive  ( change status to inactive )
+                        2)
+                        3)        
+                        
+                        Details    
+                        ------------
+                        Agencies Details
+                        Name / Registration Id / Address
+                        
+                        Total Clients ( 40 )
+                        Total Caregivers ( 30 )
+                        Total Conservers ( 10 )
+                        Agency Users ( 10 )
+Clients                    
+                    Total Number ( 50 )
+                        1) Name                 Details | Edit | Active | Inactive  ( change status to inactive )
+                        2)
+                        3)
+                        
+                    Details Page    
+                        Associated caregivers ( order by desc) 
+                        1)                    
+                        2)    
+                        3)     
+                        
+                        
+Caregivers            Total Number
+                        1) Name                 Details | Edit | Active | Inactive  ( change status to inactive )
+                        2)
+                        3)
+                    Details Page    
+                        Associated Clients ( order by desc )
+                        1)
+                        2)
+                        3)            
+                        
+
+Conservers            Total Number
+                        1) Name                 Details | Edit | Active | Inactive  ( change status to inactive )
+                        2)
+                        3)
+                        - Associaed Clients
+                        
+                        
+Family Members        Total Number
+                        1) Name                 Details | Edit | Active | Inactive  ( change status to inactive )
+                        2)
+                        3)     
+
+Point 6,7 and 8 are remaining...
+
+Validation
+=============
+skip to add data on page refresh -- done 

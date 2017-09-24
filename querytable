@@ -1,0 +1,115 @@
+System Admin
+=============
+CREATE TABLE `system_admin`(
+sys_id int(7) NOT NULL AUTO_INCREMENT ,
+admin_name varchar(50) NOT NULL,
+email varchar(50) NOT NULL ,
+password  varchar(64) NOT NULL,
+PRIMARY KEY (sys_id))
+
+Agency
+================================
+CREATE TABLE `agency`(
+id int(7) NOT NULL AUTO_INCREMENT ,
+agency_name varchar(50) NOT NULL,
+email varchar(50) NOT NULL ,
+address  varchar(255) NOT NULL,
+zip varchar(50) NOT NULL ,
+city varchar(50) NOT NULL ,
+state varchar(50) NOT NULL ,
+country varchar(50) NOT NULL ,
+regional_center varchar(50) NOT NULL ,
+date_registered DATETIME NOT NULL ,
+date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+updated_by int(7) NOT NULL,
+status int(7) By DEFAULT 1,
+notes varchar(255),
+password  varchar(64) NOT NULL,
+PRIMARY KEY (id),
+FOREIGN KEY (updated_by) REFERENCES system_admin(sys_id))
+
+Agency Roles
+=============
+CREATE TABLE `agency_roles`(
+id  int(7) NOT NULL AUTO_INCREMENT ,
+role varchar(50) NOT NULL ,
+date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+updated_by int(7) NOT NULL,
+status varchar(50) NOT NULL ,
+notes varchar(255),
+PRIMARY KEY (id),
+FOREIGN KEY (updated_by) REFERENCES system_admin(sys_id))
+
+Agency Users
+=======================
+CREATE TABLE `agency_users`(
+id int(7) NOT NULL AUTO_INCREMENT ,
+agency_id int(7) NOT NULL, 
+email varchar(50) NOT NULL ,
+name varchar(50) NOT NULL ,
+gender varchar(10) NOT NULL ,
+dob DATE NOT NULL,
+language varchar(50) NOT NULL ,
+role_id  int(7) NOT NULL,
+address varchar(255) NOT NULL,
+zip  varchar(50) NOT NULL ,
+city varchar(50) NOT NULL ,
+state varchar(50) NOT NULL ,
+country varchar(50) NOT NULL ,
+date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+updated_by int(7) NOT NULL,
+status By DEFAULT 1,
+notes varchar(255),
+PRIMARY KEY (id),
+FOREIGN KEY (agency_id) REFERENCES agency(id),
+FOREIGN KEY (role_id) REFERENCES agency_roles(id),
+FOREIGN KEY (updated_by) REFERENCES agency(id));
+
+Client_Details
+===========================
+CREATE TABLE `client_details`(
+client_id int(7) NOT NULL AUTO_INCREMENT ,
+date_registered DATETIME NOT NULL ,
+income_source   varchar(50) NOT NULL ,
+amount  int(15) NOT NULL,
+diagnosis  varchar(50) NOT NULL ,
+medications varchar(50) NOT NULL ,
+health_insurance  varchar(50) NOT NULL ,
+medical_providers varchar(50) NOT NULL ,
+service_coorindator  varchar(50) NOT NULL ,
+legal_issues  varchar(50) NOT NULL ,
+date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+updated_by int(7) NOT NULL,
+agency_user_id int(7) NOT NULL,
+status varchar(50) NOT NULL ,
+notes varchar(255),
+PRIMARY KEY (client_id),
+FOREIGN KEY (updated_by) REFERENCES agency(id)
+FOREIGN KEY (agency_user_id) REFERENCES agency_users(id)
+)
+
+CareGiver_Details
+=========================
+CREATE TABLE `caregiver_details`(
+caregiver_id  int(7) NOT NULL AUTO_INCREMENT,
+languages  varchar(50) NOT NULL ,
+special_skills varchar(50) NOT NULL ,
+date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+updated_by int(7) NOT NULL,
+agency_user_id int(7) NOT NULL,
+status varchar(50) NOT NULL ,
+notes varchar(255),
+PRIMARY KEY (caregiver_id),
+FOREIGN KEY (updated_by) REFERENCES agency(id)
+FOREIGN KEY (agency_user_id) REFERENCES agency_users(id)
+)
+
+
+To Fetch table country
+===============================
+SELECT count(id) as Agency,(select count(id) from agency_users) as Users,(select count(caregiver_id) from caregiver_details) as Caregivers,(select count(client_id) from client_details) as Clients FROM `agency`

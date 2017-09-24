@@ -1,0 +1,247 @@
+UPDATE Users
+SET password = MD5('tony123')
+WHERE user_id = 55;
+
+MD5 generates a 128-bit hash value. You can use CHAR(32) or BINARY(16)
+SHA-1 generates a 160-bit hash value. You can use CHAR(40) or BINARY(20)
+SHA-224 generates a 224-bit hash value. You can use CHAR(56) or BINARY(28)
+SHA-256 generates a 256-bit hash value. You can use CHAR(64) or BINARY(32)
+SHA-384 generates a 384-bit hash value. You can use CHAR(96) or BINARY(48)
+SHA-512 generates a 512-bit hash value. You can use CHAR(128) or BINARY(64)
+BCrypt generates an implementation-dependent 448-bit hash value.
+
+Tables
+==============
+Agency
+=================
+Id int(7) NOT NULL AUTO_INCREMENT ,
+Agency_Name varchar(50) NOT NULL,
+Email varchar(50) NOT NULL ,
+Address  varchar(255) NOT NULL,
+Zip varchar(50) NOT NULL ,
+City varchar(50) NOT NULL ,
+State varchar(50) NOT NULL ,
+Country varchar(50) NOT NULL ,
+Regional_Center varchar(50) NOT NULL ,
+Date_Registered DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+Date_Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+Date_Updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+Updated_by varchar(50) NOT NULL ,
+Status varchar(50) NOT NULL ,
+Notes varchar(255),
+PRIMARY KEY (id)
+
+Agency Roles
+=============
+Id  int(7) NOT NULL AUTO_INCREMENT ,
+Role varchar(50) NOT NULL ,
+Date Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+Date Updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+Updated By  varchar(50) NOT NULL ,
+Status varchar(50) NOT NULL ,
+Notes varchar(255),
+PRIMARY KEY (id);
+
+Agency Users
+=======================
+Id int(7) NOT NULL AUTO_INCREMENT ,
+Agency_Id int(7) NOT NULL, 
+Email varchar(50) NOT NULL ,
+Name varchar(50) NOT NULL ,
+Gender varchar(10) NOT NULL ,
+Date of Birth DATE NOT NULL,
+Language varchar(50) NOT NULL ,
+Role_Id  int(7) NOT NULL,
+Address varchar(255) NOT NULL,
+Zip  varchar(50) NOT NULL ,
+City varchar(50) NOT NULL ,
+State varchar(50) NOT NULL ,
+Country varchar(50) NOT NULL ,
+Date Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+Date Updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+Updated_by varchar(50) NOT NULL ,
+Status varchar(50) NOT NULL ,
+Notes varchar(255),
+PRIMARY KEY (id),
+FOREIGN KEY (Agency_Id) REFERENCES Agency(id),
+FOREIGN KEY (Role_Id) REFERENCES Agency_Roles(id);
+
+Client_Details
+===========================
+Client_Id int(7) NOT NULL AUTO_INCREMENT ,
+Date_Registered  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+Income_Source   varchar(50) NOT NULL ,
+Amount  int(15) NOT NULL,
+Diagnosis  varchar(50) NOT NULL ,
+Medications varchar(50) NOT NULL ,
+Health_Insurance  varchar(50) NOT NULL ,
+Medical_providers varchar(50) NOT NULL ,
+Service_Coorindator  varchar(50) NOT NULL ,
+Legal_Issues  varchar(50) NOT NULL ,
+Date_Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+Date_Updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+Updated_by varchar(50) NOT NULL ,
+Status varchar(50) NOT NULL ,
+Notes varchar(255),
+PRIMARY KEY (Client_Id);
+
+CareGiver_Details
+=========================
+CareGiver_Id  int(7) NOT NULL AUTO_INCREMENT,
+Languages  varchar(50) NOT NULL ,
+Special Skills varchar(50) NOT NULL ,
+Date_Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+Date_Updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+Updated_by varchar(50) NOT NULL ,
+Status varchar(50) NOT NULL ,
+Notes varchar(255),
+PRIMARY KEY (CareGiver_Id);
+
+Client_Family_map
+================================
+Family_Id int(7) NOT NULL AUTO_INCREMENT,
+Client_Id int(7) NOT NULL,
+Date_Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+Date_Updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+Updated_by varchar(50) NOT NULL ,
+Status varchar(50) NOT NULL ,
+Notes varchar(255),
+PRIMARY KEY (Family_Id),
+FOREIGN KEY (Client_Id) REFERENCES Client_Details(Client_Id);
+
+Client_Caregiver_mapping
+============================
+Client_Id int(7) NOT NULL,
+CareGiver_Id  int(7) NOT NULL,
+Date_assigned DATETIME NOT NULL,
+Date_closed  DATETIME NOT NULL,
+Assigned_by  varchar(50) NOT NULL ,
+Accepted_by varchar(50) NOT NULL ,
+Date_Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+Date_Updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+Updated_by varchar(50) NOT NULL ,
+Status varchar(50) NOT NULL ,
+Notes varchar(255),
+FOREIGN KEY (Client_Id) REFERENCES Client_Details(Client_Id),
+FOREIGN KEY (CareGiver_Id) REFERENCES CareGiver_Details(CareGiver_Id);
+
+Client_Conserver_map
+===================================
+Conserver_Id int(7) NOT NULL AUTO_INCREMENT,
+Client_Id int(7) NOT NULL,
+Date_assigned DATETIME NOT NULL,
+Date_closed  DATETIME NOT NULL,
+Assigned_by varchar(50) NOT NULL ,
+Date_Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+Date_Updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+Updated_by varchar(50) NOT NULL ,
+Status varchar(50) NOT NULL ,
+Notes varchar(255),
+PRIMARY KEY (Conserver_Id),
+FOREIGN KEY (Client_Id) REFERENCES Client_Details(Client_Id);
+
+Care_Giver_Schedule
+==================================
+CareGiver_Id int(7) NOT NULL,
+Assignee_Id int(7) NOT NULL,
+Client_Id int(7) NOT NULL,
+Date DATE NOT NULL,
+Time_Duration  TIME  NOT NULL,
+Date_Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+Date_Updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+Updated_by varchar(50) NOT NULL ,
+Status varchar(50) NOT NULL ,
+Notes varchar(255),
+FOREIGN KEY (CareGiver_Id) REFERENCES CareGiver_Details(CareGiver_Id),
+FOREIGN KEY (Client_Id) REFERENCES Client_Details(Client_Id);
+
+CareGiver_timelog
+====================================
+CareGiver_Id int(7) NOT NULL,
+Client_Id int(7) NOT NULL,
+Date  DATE NOT NULL,
+Login_Time TIME  NOT NULL,
+Logout_Time TIME  NOT NULL,
+Date_Created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+Date_Updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+Updated_by varchar(50) NOT NULL ,
+Status varchar(50) NOT NULL ,
+Notes varchar(255),
+Viewed_By varchar(50) NOT NULL ,
+FOREIGN KEY (CareGiver_Id) REFERENCES CareGiver_Details(CareGiver_Id),
+FOREIGN KEY (Client_Id) REFERENCES Client_Details(Client_Id);
+
+Property_Owner
+==================================
+Id  int(7) NOT NULL AUTO_INCREMENT,
+Name varchar(50) NOT NULL ,
+Address varchar(255) NOT NULL ,
+Zip varchar(50) NOT NULL ,
+City varchar(50) NOT NULL ,
+State varchar(50) NOT NULL ,
+Country varchar(50) NOT NULL ,
+Details varchar(255) NOT NULL ,
+Role-property manager,Landlord,enabledliving  varchar(50) NOT NULL ,
+Registered_on DATETIME NOT NULL,
+Created_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+Updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+Updated_by varchar(50) NOT NULL ,
+Status varchar(50) NOT NULL ,
+PRIMARY KEY (id);
+
+Property_Details
+=============================
+Property_Id int(7) NOT NULL AUTO_INCREMENT,
+Title  varchar(50) NOT NULL ,
+OwnerId int(7) NOT NULL,
+Address varchar(255) NOT NULL ,
+Zip varchar(50) NOT NULL ,
+City varchar(50) NOT NULL ,
+State varchar(50) NOT NULL ,
+Country varchar(50) NOT NULL ,
+# of rooms
+Size of bedrooms
+# of bathrooms
+# parking space
+Total_Square_Feet int(7) NOT NULL,
+Approx_rent_of_area   int(7) NOT NULL,
+Property_Image varchar(100) DEFAULT NULL,
+Created_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+Updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+Updated_by varchar(50) NOT NULL ,
+Status varchar(50) NOT NULL ,
+PRIMARY KEY (id),
+FOREIGN KEY (OwnerId) REFERENCES Property_Owner(Id);
+
+Client_Caregiver_property_map
+======================================
+Client_Id int(7) NOT NULL,
+CareGiver_Id int(7) NOT NULL,
+Property_Id int(7) NOT NULL,
+Date_assigned DATETIME NOT NULL,
+Date_closed  DATETIME NOT NULL,
+Assignee int(7) NOT NULL,
+Created_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+Updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+Updated_by varchar(50) NOT NULL ,
+Status varchar(50) NOT NULL ,
+Notes varchar(255),
+FOREIGN KEY (Client_Id) REFERENCES Client_Details(Client_Id),
+FOREIGN KEY (CareGiver_Id) REFERENCES CareGiver_Details(CareGiver_Id),
+FOREIGN KEY (Property_Id) REFERENCES Property_Details(Property_Id);
+
+Property Payments
+=============================
+Property Id int(7) NOT NULL,
+owner_id int(7) NOT NULL,
+pay_date DATETIME NOT NULL,
+amount  int(15) NOT NULL,
+payment_by varchar(50) NOT NULL ,
+assign_date DATETIME NOT NULL,
+Cheque_Image  varchar(100) DEFAULT NULL,
+Updated date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+Updated_by varchar(50) NOT NULL ,
+Status varchar(50) NOT NULL ,
+Notes varchar(255),
+FOREIGN KEY (Property_Id) REFERENCES Property_Details(Property_Id),
+FOREIGN KEY (OwnerId) REFERENCES Property_Owner(Id);
